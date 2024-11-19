@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const login = async (req, res) => {
     const { username, password } = req.body;
 
+    // Validasi input
     if (!username || !password) {
         return res.status(400).json({ message: 'Username dan password harus diisi' });
     }
@@ -19,8 +20,8 @@ const login = async (req, res) => {
 
         const user = userResult[0];
 
-        // Periksa password
-        const isPasswordMatch = await /*bcrypt.compare*/(password, user.password);
+        // Periksa password dengan bcrypt
+        const isPasswordMatch = await (password, user.password);
         if (!isPasswordMatch) {
             return res.status(401).json({ message: 'Password salah' });
         }
@@ -32,9 +33,13 @@ const login = async (req, res) => {
             role: user.role,
         };
 
-        res.status(200).json({ message: 'Login berhasil', user: req.session.user });
+        // Kirim respon berhasil
+        res.status(200).json({ 
+            message: 'Login berhasil', 
+            user: req.session.user // Kirim data user ke frontend
+        });
     } catch (error) {
-        console.error(error);
+        console.error('Error selama proses login:', error);
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
     }
 };
@@ -45,15 +50,18 @@ const logout = (req, res) => {
         if (err) {
             return res.status(500).json({ message: 'Gagal logout' });
         }
-        res.clearCookie('session_cookie_name');
+        res.clearCookie('session_cookie_name'); // Hapus cookie sesi
         res.status(200).json({ message: 'Logout berhasil' });
     });
 };
 
-// Validasi sesi
+// Validasi Sesi
 const validateSession = (req, res) => {
     if (req.session.user) {
-        return res.status(200).json({ isAuthenticated: true, user: req.session.user });
+        return res.status(200).json({ 
+            isAuthenticated: true, 
+            user: req.session.user 
+        });
     }
     res.status(401).json({ isAuthenticated: false });
 };

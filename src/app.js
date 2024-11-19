@@ -7,6 +7,7 @@ const MySQLStore = require('express-mysql-session')(session);
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const db = require('./config/db');
+const cors = require('cors');
 
 // Inisialisasi aplikasi
 const app = express();
@@ -31,6 +32,10 @@ app.use(
     })
 );
 
+app.use(cors({
+    origin: 'http://localhost:5173', // Ganti dengan URL frontend Anda
+    credentials: true,
+}));
 // Routes
 app.use('/api/auth', authRoutes);
 
