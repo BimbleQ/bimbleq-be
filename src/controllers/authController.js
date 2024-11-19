@@ -20,9 +20,13 @@ const login = async (req, res) => {
 
         const user = userResult[0];
 
-        // Periksa password dengan bcrypt
-        const isPasswordMatch = await (password, user.password);
-        if (!isPasswordMatch) {
+        //password check with bcrypt
+        // const isPasswordMatch = await bcrypt.compare(password, user.password);
+        // if (!isPasswordMatch) {
+        //     return res.status(401).json({ message: 'Password salah' });
+        // }
+
+        if (password !== user.password) {
             return res.status(401).json({ message: 'Password salah' });
         }
 
