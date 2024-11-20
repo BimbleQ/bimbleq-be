@@ -9,15 +9,15 @@ const authRoutes = require('./routes/authRoutes');
 const db = require('./config/db');
 const cors = require('cors');
 
-// Inisialisasi aplikasi
+
 const app = express();
 
-// Middleware
+//middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Konfigurasi session
+//session configuration
 const sessionStore = new MySQLStore({}, db.pool);
 app.use(
     session({
@@ -27,15 +27,16 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            maxAge: 1000 * 60 * 60 * 24, // 1 hari
+            maxAge: 1000 * 60 * 60 * 24, //1 hari
         },
     })
 );
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Ganti dengan URL frontend Anda
+    origin: 'http://localhost:5173', //url fe
     credentials: true,
 }));
+
 // Routes
 app.use('/api/auth', authRoutes);
 

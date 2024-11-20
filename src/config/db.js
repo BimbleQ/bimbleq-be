@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-// Buat koneksi pool
+//create pool connection
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 3306,
@@ -10,6 +10,7 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
+    connectTimeout: 10000,
 });
 
 
@@ -30,7 +31,20 @@ pool.getConnection((err, connection) => {
 
 module.exports = { pool };
 
-// Promisify query untuk mempermudah penggunaan async/await
+//promisify query untuk mempermudah penggunaan async/await
 const db = pool.promise();
+
+//error handling
+pool.on('error', (err) => {
+    console.error('Error koneksi pool:', err.code);
+
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+        console.error('Koneksi database terputus. Membuka ulang koneksi...');
+    } else if (err.code === 'ECONNRESET') {
+        console.error('Koneksi terputus secara mendadak.');
+    } else {
+        console.error('Error lainnya:', err);
+    }
+});
 
 module.exports = db;

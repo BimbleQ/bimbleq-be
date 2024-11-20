@@ -1,17 +1,17 @@
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
 
-// Login
+//login
 const login = async (req, res) => {
     const { username, password } = req.body;
 
-    // Validasi input
+    //input validation
     if (!username || !password) {
         return res.status(400).json({ message: 'Username dan password harus diisi' });
     }
 
     try {
-        // Cari user berdasarkan username
+        //cari user berdasarkan username
         const [userResult] = await db.query('SELECT * FROM user WHERE username = ?', [username]);
 
         if (userResult.length === 0) {
@@ -30,17 +30,17 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Password salah' });
         }
 
-        // Simpan data user ke sesi
+        //simpan data user ke sesi
         req.session.user = {
             id_user: user.id_user,
             username: user.username,
             role: user.role,
         };
 
-        // Kirim respon berhasil
+        //kirim respon berhasil
         res.status(200).json({ 
             message: 'Login berhasil', 
-            user: req.session.user // Kirim data user ke frontend
+            user: req.session.user //kirim data user ke frontend
         });
     } catch (error) {
         console.error('Error selama proses login:', error);
