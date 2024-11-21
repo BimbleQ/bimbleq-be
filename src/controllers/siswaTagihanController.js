@@ -12,7 +12,7 @@ const getSiswaTagihan = async (req, res) => {
                     pembayaran.jumlah,
                     pembayaran.status
              FROM pembayaran
-             WHERE pembayaran.id_user = ? AND pembayaran.status = 'pending'`,
+             WHERE pembayaran.id_siswa = ? AND pembayaran.status = 'pending'`,
             [user.id_user]
         );
 

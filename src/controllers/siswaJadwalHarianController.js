@@ -14,10 +14,10 @@ const getPertemuanHariIni = async (req, res) => {
              FROM pertemuan
              INNER JOIN kelas ON pertemuan.id_kelas = kelas.id_kelas
              INNER JOIN pelajaran ON kelas.id_matpel = pelajaran.id_matpel
-             INNER JOIN pengajar ON pertemuan.id_user = pengajar.id_user
+             INNER JOIN pengajar ON pertemuan.id_pengajar = pengajar.id_pengajar
              INNER JOIN siswa_kelas ON kelas.id_kelas = siswa_kelas.id_kelas
-             WHERE siswa_kelas.id_user = ? AND DATE(pertemuan.waktu_kelas) = CURDATE()`,
-            [user.id_user]
+             WHERE siswa_kelas.id_siswa = ? AND DATE(pertemuan.waktu_kelas) = CURDATE()`,
+            [user.id_siswa]
         );
         
         res.status(200).json({ pertemuanHariIni });
