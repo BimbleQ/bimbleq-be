@@ -1,4 +1,4 @@
-// Load environment variables from .env
+//load environment variables from .env
 require('dotenv').config();
  
 const express = require('express');
@@ -6,7 +6,7 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
-const siswaTagihanRoutes = require('./routes/siswaTagihanRoutes');
+const siswaRoutes = require('./routes/siswaRoutes');
 const db = require('./config/db');
 const cors = require('cors');
 
@@ -38,7 +38,8 @@ app.use(cors({
     credentials: true,
 }));
 
-// Routes
+//routes
 app.use('/api/auth', authRoutes);
-app.use('/api/siswa', siswaTagihanRoutes);
+app.use('/api/siswa', siswaRoutes);
+
 module.exports = app;

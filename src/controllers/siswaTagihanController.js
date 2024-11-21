@@ -1,22 +1,22 @@
-const db = require('../config/db'); // Import koneksi database
+const db = require('../config/db');
 
-// Mendapatkan data tagihan siswa dengan status "unpaid"
+//mendapatkan data tagihan siswa dengan status "unpaid"
 const getSiswaTagihan = async (req, res) => {
     try {
-        // Ambil user yang login dari session
+        //ser yang login dari session
         const user = req.session.user;
 
-        // Query untuk mendapatkan data tagihan dengan status "unpaid"
+        //query untuk mendapatkan data tagihan dengan status "pending"
         const [tagihan] = await db.query(
-            `SELECT pembayaran.tipe_pembayaran AS nama_tagihan,
+            `SELECT pembayaran.tipe_pembayaran AS jenis_tagihan,
                     pembayaran.jumlah,
                     pembayaran.status
              FROM pembayaran
-             WHERE pembayaran.id_user = ? AND pembayaran.status = 'pending'`,
+             WHERE pembayaran.id_siswa = ? AND pembayaran.status = 'pending'`,
             [user.id_user]
         );
 
-        // Kirim data tagihan ke frontend
+        //kirim data tagihan ke frontend
         res.status(200).json({ tagihan });
     } catch (error) {
         console.error('Error mendapatkan data tagihan siswa:', error);
