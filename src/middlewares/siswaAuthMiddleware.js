@@ -1,10 +1,3 @@
-const isAuthenticated = (req, res, next) => {
-    // Periksa apakah sesi user ada
-    if (!req.session || !req.session.user) {
-        return res.status(401).json({ message: 'Anda harus login terlebih dahulu' });
-    }
-    next();
-};
 
 const isSiswa = (req, res, next) => {
     const user = req.session.user;
@@ -17,4 +10,4 @@ const isSiswa = (req, res, next) => {
     next();
 };
 
-module.exports = { isAuthenticated, isSiswa };
+module.exports = isSiswa ;

@@ -1,6 +1,7 @@
 const express = require('express');
 const { getSiswaTagihan } = require('../controllers/siswaTagihanController');
-const { isAuthenticated, isSiswa } = require('../middlewares/siswaAuthMiddleware');
+const isSiswa = require('../middlewares/siswaAuthMiddleware');
+const isAuthenticated = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
