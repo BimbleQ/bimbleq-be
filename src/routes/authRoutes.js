@@ -4,13 +4,13 @@ const isAuthenticated = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-// Login
+//login
 router.post('/login', login);
 
-// Logout
+//logout
 router.post('/logout', isAuthenticated, logout);
 
-// Validasi sesi
+//session validate
 router.get('/validate', validateSession);
 
 module.exports = router;
