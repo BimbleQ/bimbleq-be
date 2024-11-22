@@ -11,6 +11,7 @@ const { getJumlahPengajuanReguler } = require("../controllers/pengajuanRegulerCo
 const { createKelas } = require("../controllers/kelasController");
 const { getTagihan } = require("../controllers/tagihanController");
 const { updateStatusTagihan } = require("../controllers/tagihanController");
+const { createPertemuan } = require("../controllers/pertemuanController");
 
 const isAuthenticated = require("../middlewares/authMiddleware");
 const isAdmin = require("../middlewares/adminAuthMiddleware");
@@ -46,5 +47,8 @@ router.get("/getTagihan", isAuthenticated, isAdmin, getTagihan);
 
 // Update Status Tagihan
 router.patch("/updateStatusTagihan", isAuthenticated, isAdmin, updateStatusTagihan);
+
+// Post Pertemuan Baru
+router.post("/createPertemuan", isAuthenticated, isAdmin, createPertemuan);
 
 module.exports = router;
