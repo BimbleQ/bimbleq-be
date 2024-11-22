@@ -87,4 +87,36 @@ const getJumlahKelasAktif = async (req, res) => {
   }
 };
 
-module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif };
+const createKelas = async (req, res) => {
+  try {
+    // Data dari request body
+    const { id_matpel, id_pengajar, nama_kelas, tipe } = req.body;
+
+    // Validasi id_matpel ada di tabel pelajaran
+    const [pelajaran] = await db.query(`SELECT * FROM pelajaran WHERE id_matpel = ?`, [id_matpel]);
+    if (pelajaran.length === 0) {
+      return res.status(400).json({ message: "Mata pelajaran tidak ditemukan." });
+    }
+
+    // Validasi id_pengajar ada di tabel pengajar
+    const [pengajar] = await db.query(`SELECT * FROM pengajar WHERE id_pengajar = ?`, [id_pengajar]);
+    if (pengajar.length === 0) {
+      return res.status(400).json({ message: "Pengajar tidak ditemukan." });
+    }
+
+    // Validasi tipe kelas
+    if (!["reguler", "privat"].includes(tipe)) {
+      return res.status(400).json({ message: "Tipe kelas harus 'reguler' atau 'privat'." });
+    }
+
+    // Query untuk menambahkan kelas baru
+    await db.query(`INSERT INTO kelas (id_matpel, id_pengajar, nama_kelas, tipe) VALUES (?, ?, ?, ?)`, [id_matpel, id_pengajar, nama_kelas, tipe]);
+
+    res.status(201).json({ message: "Kelas berhasil dibuat." });
+  } catch (error) {
+    console.error("Error saat membuat kelas:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif, createKelas };

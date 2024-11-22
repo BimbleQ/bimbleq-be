@@ -6,6 +6,7 @@ const { getJumlahSiswa } = require("../controllers/siswaController");
 const { getJumlahTagihanPending } = require("../controllers/tagihanController");
 const { getJumlahPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
 const { getJumlahPengajuanReguler } = require("../controllers/pengajuanRegulerController");
+const { createKelas } = require("../controllers/kelasController");
 const isAuthenticated = require("../middlewares/authMiddleware");
 const isAdmin = require("../middlewares/adminAuthMiddleware");
 
@@ -31,5 +32,8 @@ router.get("/jumlahPengajuanPrivat", isAuthenticated, isAdmin, getJumlahPengajua
 
 // Get Jumlah Request Reguler
 router.get("/jumlahPengajuanReguler", isAuthenticated, isAdmin, getJumlahPengajuanReguler);
+
+// Post Kelas Baru
+router.post("/createKelas", isAuthenticated, isAdmin, createKelas);
 
 module.exports = router;
