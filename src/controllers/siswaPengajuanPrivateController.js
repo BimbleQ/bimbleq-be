@@ -44,4 +44,26 @@ const getRequestKelasPrivat = async (req, res) => {
     }
 };
 
-module.exports = { getRequestKelasPrivat };
+const createRequestKelasPrivate = async (req, res) => {
+    const { id_siswa, id_matpel, id_pengajar, waktu_kelas, catatan } = req.body;
+
+    if (!id_siswa || !id_matpel || !id_pengajar || !waktu_kelas) {
+        return res.status(400).json({ message: 'Semua field wajib diisi' });
+    }
+
+    try {
+        const [result] = await db.query(
+            `INSERT INTO request_kelas_private (id_siswa, id_matpel, id_pengajar, waktu_kelas, status_request, tanggal_request, catatan)
+             VALUES (?, ?, ?, ?, ?, NOW(), ?)`,
+            [id_siswa, id_matpel, id_pengajar, waktu_kelas, 'pending', catatan || null]
+        );
+
+        res.status(201).json({ message: 'Request kelas private berhasil dibuat', id_request_private: result.insertId });
+    } catch (error) {
+        console.error('Error menyimpan data request kelas private:', error);
+        res.status(500).json({ message: 'Terjadi kesalahan pada server' });
+    }
+};
+
+
+module.exports = { getRequestKelasPrivat, createRequestKelasPrivate };
