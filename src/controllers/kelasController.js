@@ -86,4 +86,5 @@ const getJumlahKelasAktif = async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan pada server" });
   }
 };
+
 module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif };
