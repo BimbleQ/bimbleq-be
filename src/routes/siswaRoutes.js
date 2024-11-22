@@ -7,7 +7,8 @@ const { getRequestKelasReguler } = require('../controllers/siswaPengajuanReguler
 const { getPengajarByMataPelajaran } = require('../controllers/pengajarController');
 const { getKelasTujuanRefId, getKelasAwal } = require('../controllers/kelasController');
 const { postRequestKelasReguler } = require('../controllers/siswaReqRegulerController');
-const { getTagihanBySiswa } = require('../controllers/siswaPembayaranController');
+const { getTagihanBySiswa,getHistoriPembayaran } = require('../controllers/siswaPembayaranController');
+const { getCalendarBySiswa } = require('../controllers/siswaCalendarController');
 const isAuthenticated = require('../middlewares/authMiddleware'); 
 const isSiswa = require('../middlewares/siswaAuthMiddleware'); 
 
@@ -39,6 +40,10 @@ router.get('/kelasAwal', isAuthenticated, isSiswa, getKelasAwal);
 
 //api for bukti pembayaran
 router.get('/getTagihanBysiswa',isAuthenticated, isSiswa,getTagihanBySiswa );
+    //api for history bayar siswa sorted by session id_siswa
+    router.get('/getHistoryBayarSiswa',isAuthenticated, isSiswa,getHistoriPembayaran );
 
+//api for showing calendar siswa
+router.get('/getCalendar',isAuthenticated, isSiswa, getCalendarBySiswa );
 
 module.exports = router;
