@@ -16,4 +16,24 @@ const getJumlahKelasAktif = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahKelasAktif };
+const createKelas = async (req, res) => {
+  try {
+    // Data dari request body
+    const { id_matpel, nama_kelas, tipe } = req.body;
+
+    // Validasi tipe kelas
+    if (!["reguler", "privat"].includes(tipe)) {
+      return res.status(400).json({ message: "Tipe kelas harus 'reguler' atau 'privat'." });
+    }
+
+    // Query untuk menambahkan kelas baru
+    await db.query(`INSERT INTO kelas (id_matpel, nama_kelas, tipe) VALUES (?, ?, ?)`, [id_matpel, nama_kelas, tipe]);
+
+    res.status(201).json({ message: "Kelas berhasil dibuat." });
+  } catch (error) {
+    console.error("Error saat membuat kelas:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+module.exports = { getJumlahKelasAktif, createKelas };
