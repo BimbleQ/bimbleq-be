@@ -7,6 +7,7 @@ const MySQLStore = require('express-mysql-session')(session);
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const siswaRoutes = require('./routes/siswaRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const db = require('./config/db');
 const cors = require('cors');
 
@@ -41,5 +42,5 @@ app.use(cors({
 //routes
 app.use('/api/auth', authRoutes);
 app.use('/api/siswa', siswaRoutes);
-
+app.use('/api/admin', adminRoutes);
 module.exports = app;
