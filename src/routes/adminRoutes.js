@@ -16,6 +16,7 @@ const { updateStatusTagihan } = require("../controllers/tagihanController");
 const { createPertemuan } = require("../controllers/pertemuanController");
 const { getKelas } = require("../controllers/kelasController");
 const { updateKelas } = require("../controllers/kelasController");
+const { getSiswaByKelas } = require("../controllers/siswaController");
 
 // Pengelolaan Pengajuan dan Pengajar
 const { getPengajuanKelasPrivat } = require("../controllers/pengajuanPrivateController");
@@ -23,6 +24,7 @@ const { getPengajuanKelasReguler } = require("../controllers/pengajuanRegulerCon
 const { updateStatusPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
 const { updateStatusPengajuanReguler } = require("../controllers/pengajuanRegulerController");
 const { getPengajar } = require("../controllers/pengajarController");
+const { updatePengajar } = require("../controllers/pengajarController");
 
 const isAuthenticated = require("../middlewares/authMiddleware");
 const isAdmin = require("../middlewares/adminAuthMiddleware");
@@ -66,7 +68,10 @@ router.post("/createPertemuan", isAuthenticated, isAdmin, createPertemuan);
 router.get("/getKelas", isAuthenticated, isAdmin, getKelas);
 
 // PUT - Edit Kelas /updateKelas?id_kelas=1
-router.put("/updateKelas", isAuthenticated, isAdmin, updateKelas);
+router.put("/updateKelas/:id_kelas", isAuthenticated, isAdmin, updateKelas);
+
+// GET - Ambil Daftar Siswa Berdasarkan kelas
+router.get("/getSiswaByKelas/:id_kelas", isAuthenticated, isAdmin, getSiswaByKelas);
 
 // GET - Pengajuan kelas Privat
 router.get("/getPengajuanKelasPrivat", isAuthenticated, isAdmin, getPengajuanKelasPrivat);
@@ -82,5 +87,8 @@ router.patch("/updateStatusPengajuanReguler", isAuthenticated, isAdmin, updateSt
 
 // GET - Tampilkan Daftar Pengajar
 router.get("/getPengajar", isAuthenticated, isAdmin, getPengajar);
+
+// PUT - Edit Pengajar
+router.put("/updatePengajar/:id_pengajar", isAuthenticated, isAdmin, updatePengajar);
 
 module.exports = router;

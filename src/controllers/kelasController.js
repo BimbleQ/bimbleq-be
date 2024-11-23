@@ -94,6 +94,7 @@ const getKelas = async (req, res) => {
               kelas.id_kelas,
               kelas.nama_kelas,
               kelas.tipe,
+              kelas.jadwal_default,
               pelajaran.nama_matpel,
               pengajar.nama AS nama_pengajar,
               COUNT(siswa_kelas.id_siswa) AS jumlah_siswa
@@ -146,7 +147,7 @@ const createKelas = async (req, res) => {
 
 const updateKelas = async (req, res) => {
   try {
-    const { id_kelas } = req.query; // Ambil ID kelas dari query string
+    const { id_kelas } = req.params; // Ambil ID kelas dari query string
     const { id_matpel, nama_kelas, tipe, id_pengajar } = req.body; // Data yang ingin diperbarui
 
     if (!id_kelas) {
