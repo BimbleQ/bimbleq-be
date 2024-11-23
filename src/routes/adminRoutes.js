@@ -3,7 +3,7 @@ const express = require("express");
 // Halaman Admin Utama
 const { getMataPelajaran, createPelajaran, removePelajaran } = require("../controllers/pelajaranController");
 const { getJumlahKelasAktif } = require("../controllers/kelasController");
-const { getJumlahPengajar } = require("../controllers/pengajarController");
+const { getJumlahPengajar, getPengajarByMataPelajaran } = require("../controllers/pengajarController");
 const { getJumlahSiswa } = require("../controllers/siswaController");
 const { getJumlahTagihanPending } = require("../controllers/tagihanController");
 const { getJumlahPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
@@ -120,6 +120,9 @@ router.patch("/updateStatusPengajuanReguler", isAuthenticated, isAdmin, updateSt
 
 // GET - Tampilkan Daftar Pengajar
 router.get("/getPengajar", isAuthenticated, isAdmin, getPengajar);
+
+// GET - Tampilkan Daftar Pengajar berdasarkan Spesialisasi
+router.get("/pengajarMatpel", isAuthenticated, isAdmin, getPengajarByMataPelajaran);
 
 // POST - Daftarkan Pengajar
 router.post("/addPengajar", isAuthenticated, isAdmin, addPengajar);
