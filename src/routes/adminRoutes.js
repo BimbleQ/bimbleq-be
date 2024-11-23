@@ -9,7 +9,7 @@ const { getJumlahTagihanPending } = require("../controllers/tagihanController");
 const { getJumlahPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
 const { getJumlahPengajuanReguler } = require("../controllers/pengajuanRegulerController");
 
-// Pengelolaan Kelas, Pertemuan, dan Tagihan.
+// Pengelolaan Kelas, Siswa, Pertemuan, dan Tagihan.
 const { createKelas } = require("../controllers/kelasController");
 const { getTagihan } = require("../controllers/tagihanController");
 const { updateStatusTagihan } = require("../controllers/tagihanController");
@@ -18,6 +18,7 @@ const { getKelas } = require("../controllers/kelasController");
 const { updateKelas } = require("../controllers/kelasController");
 const { getSiswa } = require("../controllers/siswaController");
 const { getSiswaByKelas } = require("../controllers/siswaController");
+const { addSiswaToKelas } = require("../controllers/siswaController");
 
 // Pengelolaan Pengajuan dan Pengajar
 const { getPengajuanKelasPrivat } = require("../controllers/pengajuanPrivateController");
@@ -76,6 +77,9 @@ router.get("/getSiswa", isAuthenticated, isAdmin, getSiswa);
 
 // GET - Ambil Daftar Siswa Berdasarkan kelas
 router.get("/getSiswaByKelas/:id_kelas", isAuthenticated, isAdmin, getSiswaByKelas);
+
+// POST - Daftarkan Siswa ke kelas
+router.post("/addSiswaToKelas/:id_kelas", isAuthenticated, isAdmin, addSiswaToKelas);
 
 // GET - Pengajuan kelas Privat
 router.get("/getPengajuanKelasPrivat", isAuthenticated, isAdmin, getPengajuanKelasPrivat);

@@ -62,4 +62,29 @@ const getSiswaByKelas = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas };
+const addSiswaToKelas = async (req, res) => {
+  try {
+    const { id_kelas } = req.params; // ID kelas dari parameter
+    const { id_siswa } = req.body; // ID siswa dari body request
+
+    if (!id_kelas || !id_siswa) {
+      return res.status(400).json({ message: "id_kelas dan id_siswa harus disertakan" });
+    }
+
+    // Periksa apakah siswa sudah ada di kelas
+    const [checkExisting] = await db.query(`SELECT * FROM siswa_kelas WHERE id_siswa = ? AND id_kelas = ?`, [id_siswa, id_kelas]);
+    if (checkExisting.length > 0) {
+      return res.status(400).json({ message: "Siswa sudah terdaftar di kelas ini" });
+    }
+
+    // Tambahkan siswa ke kelas
+    await db.query(`INSERT INTO siswa_kelas (id_siswa, id_kelas) VALUES (?, ?)`, [id_siswa, id_kelas]);
+
+    res.status(201).json({ message: "Siswa berhasil ditambahkan ke kelas" });
+  } catch (error) {
+    console.error("Error saat menambahkan siswa ke kelas:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
+module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas, addSiswaToKelas };
