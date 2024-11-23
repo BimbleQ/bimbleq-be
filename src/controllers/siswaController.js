@@ -139,4 +139,37 @@ const addSiswa = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas, addSiswaToKelas, removeSiswaFromKelas, addSiswa };
+const updateSiswa = async (req, res) => {
+  try {
+    const { id_siswa } = req.params; // Ambil ID siswa dari parameter
+    const { nama, alamat, kontak } = req.body; // Data baru yang ingin diupdate
+
+    if (!id_siswa) {
+      return res.status(400).json({ message: "ID siswa harus disertakan" });
+    }
+
+    // Periksa apakah siswa dengan ID tersebut ada
+    const [siswa] = await db.query(`SELECT * FROM siswa WHERE id_siswa = ?`, [id_siswa]);
+    if (siswa.length === 0) {
+      return res.status(404).json({ message: "Siswa tidak ditemukan" });
+    }
+
+    // Update data siswa
+    await db.query(
+      `UPDATE siswa
+       SET 
+           nama = COALESCE(?, nama),
+           alamat = COALESCE(?, alamat),
+           kontak = COALESCE(?, kontak)
+       WHERE id_siswa = ?`,
+      [nama, alamat, kontak, id_siswa]
+    );
+
+    res.status(200).json({ message: "Data siswa berhasil diperbarui" });
+  } catch (error) {
+    console.error("Error saat memperbarui siswa:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
+module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas, addSiswaToKelas, removeSiswaFromKelas, addSiswa, updateSiswa };

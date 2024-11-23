@@ -8,19 +8,23 @@ const { getJumlahSiswa } = require("../controllers/siswaController");
 const { getJumlahTagihanPending } = require("../controllers/tagihanController");
 const { getJumlahPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
 const { getJumlahPengajuanReguler } = require("../controllers/pengajuanRegulerController");
+const { getJumlahPelajaran } = require("../controllers/pelajaranController");
 
-// Pengelolaan Kelas, Siswa, Pertemuan, dan Tagihan.
+// Pengelolaan Kelas Pertemuan, dan Tagihan.
 const { createKelas } = require("../controllers/kelasController");
 const { getTagihan } = require("../controllers/tagihanController");
 const { updateStatusTagihan } = require("../controllers/tagihanController");
 const { createPertemuan } = require("../controllers/pertemuanController");
 const { getKelas } = require("../controllers/kelasController");
 const { updateKelas } = require("../controllers/kelasController");
+
+// Pengelolaan Siswa
 const { getSiswa } = require("../controllers/siswaController");
 const { getSiswaByKelas } = require("../controllers/siswaController");
 const { addSiswaToKelas } = require("../controllers/siswaController");
 const { removeSiswaFromKelas } = require("../controllers/siswaController");
 const { addSiswa } = require("../controllers/siswaController");
+const { updateSiswa } = require("../controllers/siswaController");
 
 // Pengelolaan Pengajuan dan Pengajar
 const { getPengajuanKelasPrivat } = require("../controllers/pengajuanPrivateController");
@@ -38,6 +42,9 @@ const router = express.Router();
 
 // Get Mata Pelajaran
 router.get("/pelajaran", isAuthenticated, isAdmin, getMataPelajaran);
+
+// Get Jumlah Pelajaran
+router.get("/jumlahPelajaran", isAuthenticated, isAdmin, getJumlahPelajaran);
 
 // Get Jumlah Kelas Aktif
 router.get("/jumlahKelasAktif", isAuthenticated, isAdmin, getJumlahKelasAktif);
@@ -89,6 +96,9 @@ router.delete("/removeSiswaFromKelas/:id_kelas", isAuthenticated, isAdmin, remov
 
 // POST - Daftarkan Siswa
 router.post("/addSiswa", isAuthenticated, isAdmin, addSiswa);
+
+// PUT - Edit Siswa
+router.put("/updateSiswa/:id_siswa", isAuthenticated, isAdmin, updateSiswa);
 
 // GET - Pengajuan kelas Privat
 router.get("/getPengajuanKelasPrivat", isAuthenticated, isAdmin, getPengajuanKelasPrivat);
