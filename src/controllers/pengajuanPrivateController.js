@@ -38,4 +38,26 @@ const getPengajuanKelasPrivat = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahPengajuanPrivat, getPengajuanKelasPrivat };
+const updateStatusPengajuanPrivat = async (req, res) => {
+  const { id_request_privat, status_request } = req.body;
+
+  try {
+    const query = `
+      UPDATE request_kelas_privat
+      SET status_request = ?
+      WHERE id_request_privat = ?;
+    `;
+    const [result] = await db.query(query, [status_request, id_request_privat]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Request tidak ditemukan." });
+    }
+
+    res.status(200).json({ message: "Status request privat berhasil diperbarui." });
+  } catch (error) {
+    console.error("Error saat memperbarui status request privat:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+module.exports = { getJumlahPengajuanPrivat, getPengajuanKelasPrivat, updateStatusPengajuanPrivat };
