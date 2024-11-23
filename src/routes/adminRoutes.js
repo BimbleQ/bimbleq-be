@@ -16,6 +16,7 @@ const { updateStatusTagihan } = require("../controllers/tagihanController");
 const { createPertemuan } = require("../controllers/pertemuanController");
 const { getKelas } = require("../controllers/kelasController");
 const { updateKelas } = require("../controllers/kelasController");
+const { getSiswa } = require("../controllers/siswaController");
 const { getSiswaByKelas } = require("../controllers/siswaController");
 
 // Pengelolaan Pengajuan dan Pengajar
@@ -69,6 +70,9 @@ router.get("/getKelas", isAuthenticated, isAdmin, getKelas);
 
 // PUT - Edit Kelas /updateKelas?id_kelas=1
 router.put("/updateKelas/:id_kelas", isAuthenticated, isAdmin, updateKelas);
+
+// GET - Ambil Daftar Siswa
+router.get("/getSiswa", isAuthenticated, isAdmin, getSiswa);
 
 // GET - Ambil Daftar Siswa Berdasarkan kelas
 router.get("/getSiswaByKelas/:id_kelas", isAuthenticated, isAdmin, getSiswaByKelas);

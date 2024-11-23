@@ -16,6 +16,19 @@ const getJumlahSiswa = async (req, res) => {
   }
 };
 
+const getSiswa = async (req, res) => {
+  try {
+    // Query untuk menghitung jumlah siswa
+    const [siswa] = await db.query(`SELECT * FROM siswa`);
+
+    // Kirim hasil ke response
+    res.status(200).json({ siswa });
+  } catch (error) {
+    console.error("Error mendapatkan data siswa:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
 const getSiswaByKelas = async (req, res) => {
   const { id_kelas } = req.params; //use id_matpel dari query string
 
@@ -49,4 +62,4 @@ const getSiswaByKelas = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahSiswa, getSiswaByKelas };
+module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas };
