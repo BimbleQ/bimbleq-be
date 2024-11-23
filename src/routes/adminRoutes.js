@@ -1,7 +1,7 @@
 const express = require("express");
 
 // Halaman Admin Utama
-const { getMataPelajaran } = require("../controllers/pelajaranController");
+const { getMataPelajaran, createPelajaran, removePelajaran } = require("../controllers/pelajaranController");
 const { getJumlahKelasAktif } = require("../controllers/kelasController");
 const { getJumlahPengajar } = require("../controllers/pengajarController");
 const { getJumlahSiswa } = require("../controllers/siswaController");
@@ -63,6 +63,12 @@ router.get("/jumlahPengajuanPrivat", isAuthenticated, isAdmin, getJumlahPengajua
 
 // Get Jumlah Request Reguler
 router.get("/jumlahPengajuanReguler", isAuthenticated, isAdmin, getJumlahPengajuanReguler);
+
+// Post Kelas Baru
+router.post("/createPelajaran", isAuthenticated, isAdmin, createPelajaran);
+
+// DELETE - Hapus Mata Pelajaran
+router.delete("/removePelajaran", isAuthenticated, isAdmin, removePelajaran);
 
 // Post Kelas Baru
 router.post("/createKelas", isAuthenticated, isAdmin, createKelas);
