@@ -21,6 +21,7 @@ const { updateKelas } = require("../controllers/kelasController");
 const { getPengajuanKelasPrivat } = require("../controllers/pengajuanPrivateController");
 const { getPengajuanKelasReguler } = require("../controllers/pengajuanRegulerController");
 const { updateStatusPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
+const { updateStatusPengajuanReguler } = require("../controllers/pengajuanRegulerController");
 
 const isAuthenticated = require("../middlewares/authMiddleware");
 const isAdmin = require("../middlewares/adminAuthMiddleware");
@@ -72,7 +73,10 @@ router.get("/getPengajuanKelasPrivat", isAuthenticated, isAdmin, getPengajuanKel
 // GET - Pengajuan kelas Reguler
 router.get("/getPengajuanKelasReguler", isAuthenticated, isAdmin, getPengajuanKelasReguler);
 
-// PATCH - Update status pengajuan reguler
+// PATCH - Update status pengajuan privat
 router.patch("/updateStatusPengajuanPrivat", isAuthenticated, isAdmin, updateStatusPengajuanPrivat);
+
+// PATCH - Update status pengajuan reguler
+router.patch("/updateStatusPengajuanReguler", isAuthenticated, isAdmin, updateStatusPengajuanReguler);
 
 module.exports = router;

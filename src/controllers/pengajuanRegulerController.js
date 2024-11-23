@@ -42,4 +42,26 @@ const getPengajuanKelasReguler = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahPengajuanReguler, getPengajuanKelasReguler };
+const updateStatusPengajuanReguler = async (req, res) => {
+  const { id_request_reguler, status_request } = req.body;
+
+  try {
+    const query = `
+      UPDATE request_kelas_reguler
+      SET status_request = ?
+      WHERE id_request_reguler = ?;
+    `;
+    const [result] = await db.query(query, [status_request, id_request_reguler]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Request tidak ditemukan." });
+    }
+
+    res.status(200).json({ message: "Status request reguler berhasil diperbarui." });
+  } catch (error) {
+    console.error("Error saat memperbarui status request reguler:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+module.exports = { getJumlahPengajuanReguler, getPengajuanKelasReguler, updateStatusPengajuanReguler };
