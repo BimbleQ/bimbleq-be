@@ -49,7 +49,7 @@ const getHistoriPembayaran = async (req, res) => {
                 tipe_kelas, 
                 tipe_pembayaran, 
                 jumlah, 
-                waktu_tagihan, 
+                DATE_FORMAT(waktu_tagihan, '%Y-%m-%d') AS waktu_tagihah,
                 status 
              FROM pembayaran 
              WHERE id_siswa = ? 
