@@ -1,4 +1,5 @@
 const db = require("../config/db"); // Import konfigurasi database
+const bcrypt = require("bcrypt");
 
 const getJumlahSiswa = async (req, res) => {
   try {
@@ -112,4 +113,30 @@ const removeSiswaFromKelas = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas, addSiswaToKelas, removeSiswaFromKelas };
+const addSiswa = async (req, res) => {
+  try {
+    const { username, password, nama, kontak, alamat } = req.body;
+
+    if (!username || !password || !nama) {
+      return res.status(400).json({ message: "Username, password, dan nama wajib diisi" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Tambahkan ke tabel user
+    const [userResult] = await db.query(`INSERT INTO user (username, password, role) VALUES (?, ?, 'siswa')`, [username, hashedPassword]);
+
+    const id_user = userResult.insertId;
+
+    // Tambahkan ke tabel siswa
+    await db.query(`INSERT INTO siswa (id_siswa, nama, kontak, alamat) VALUES (?, ?, ?, ?)`, [id_user, nama, kontak, alamat]);
+
+    res.status(201).json({ message: "Siswa berhasil ditambahkan" });
+  } catch (error) {
+    console.error("Error saat menambahkan siswa:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
+module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas, addSiswaToKelas, removeSiswaFromKelas, addSiswa };

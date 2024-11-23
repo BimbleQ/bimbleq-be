@@ -20,6 +20,7 @@ const { getSiswa } = require("../controllers/siswaController");
 const { getSiswaByKelas } = require("../controllers/siswaController");
 const { addSiswaToKelas } = require("../controllers/siswaController");
 const { removeSiswaFromKelas } = require("../controllers/siswaController");
+const { addSiswa } = require("../controllers/siswaController");
 
 // Pengelolaan Pengajuan dan Pengajar
 const { getPengajuanKelasPrivat } = require("../controllers/pengajuanPrivateController");
@@ -85,6 +86,9 @@ router.post("/addSiswaToKelas/:id_kelas", isAuthenticated, isAdmin, addSiswaToKe
 
 // DELETE - Hapus Siswa dari kelas
 router.delete("/removeSiswaFromKelas/:id_kelas", isAuthenticated, isAdmin, removeSiswaFromKelas);
+
+// POST - Daftarkan Siswa
+router.post("/addSiswa", isAuthenticated, isAdmin, addSiswa);
 
 // GET - Pengajuan kelas Privat
 router.get("/getPengajuanKelasPrivat", isAuthenticated, isAdmin, getPengajuanKelasPrivat);
