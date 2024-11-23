@@ -18,7 +18,10 @@ const getJumlahTagihanPending = async (req, res) => {
 
 const getTagihan = async (req, res) => {
   try {
-    const [pembayaran] = await db.query(`SELECT * FROM pembayaran`);
+    const [pembayaran] = await db.query(`
+      SELECT pembayaran.*, siswa.nama AS nama_siswa
+      FROM pembayaran
+      JOIN siswa ON pembayaran.id_siswa = siswa.id_siswa;`);
     res.status(200).json({ pembayaran });
   } catch (error) {
     console.error("Error saat mendapatkan data pembayaran:", error);
