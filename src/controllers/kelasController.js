@@ -87,6 +87,31 @@ const getJumlahKelasAktif = async (req, res) => {
   }
 };
 
+const getKelas = async (req, res) => {
+  try {
+    const query = `
+          SELECT 
+              kelas.id_kelas,
+              kelas.nama_kelas,
+              kelas.tipe,
+              pelajaran.nama_matpel,
+              pengajar.nama AS nama_pengajar,
+              COUNT(siswa_kelas.id_siswa) AS jumlah_siswa
+          FROM kelas
+          LEFT JOIN pelajaran ON kelas.id_matpel = pelajaran.id_matpel
+          LEFT JOIN pengajar ON kelas.id_pengajar = pengajar.id_pengajar
+          LEFT JOIN siswa_kelas ON kelas.id_kelas = siswa_kelas.id_kelas
+          GROUP BY kelas.id_kelas;
+      `;
+
+    const [rows] = await db.query(query);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error mendapatkan daftar kelas:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
 const createKelas = async (req, res) => {
   try {
     // Data dari request body
@@ -152,4 +177,4 @@ const updateKelas = async (req, res) => {
   }
 };
 
-module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif, createKelas, updateKelas };
+module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif, createKelas, updateKelas, getKelas };
