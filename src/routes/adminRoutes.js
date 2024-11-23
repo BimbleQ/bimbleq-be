@@ -17,11 +17,12 @@ const { createPertemuan } = require("../controllers/pertemuanController");
 const { getKelas } = require("../controllers/kelasController");
 const { updateKelas } = require("../controllers/kelasController");
 
-// Pengelolaan Pengajuan
+// Pengelolaan Pengajuan dan Pengajar
 const { getPengajuanKelasPrivat } = require("../controllers/pengajuanPrivateController");
 const { getPengajuanKelasReguler } = require("../controllers/pengajuanRegulerController");
 const { updateStatusPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
 const { updateStatusPengajuanReguler } = require("../controllers/pengajuanRegulerController");
+const { getPengajar } = require("../controllers/pengajarController");
 
 const isAuthenticated = require("../middlewares/authMiddleware");
 const isAdmin = require("../middlewares/adminAuthMiddleware");
@@ -78,5 +79,8 @@ router.patch("/updateStatusPengajuanPrivat", isAuthenticated, isAdmin, updateSta
 
 // PATCH - Update status pengajuan reguler
 router.patch("/updateStatusPengajuanReguler", isAuthenticated, isAdmin, updateStatusPengajuanReguler);
+
+// GET - Tampilkan Daftar Pengajar
+router.get("/getPengajar", isAuthenticated, isAdmin, getPengajar);
 
 module.exports = router;

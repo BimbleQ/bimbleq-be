@@ -39,4 +39,23 @@ const getPengajarByMataPelajaran = async (req, res) => {
   }
 };
 
-module.exports = { getPengajarByMataPelajaran, getJumlahPengajar };
+const getPengajar = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+          pengajar.nama,
+          pelajaran.nama_matpel AS spesialisasi,
+          pengajar.kontak
+      FROM pengajar
+      JOIN pelajaran ON pelajaran.id_matpel = pengajar.id_matpel;
+    `;
+
+    const [pengajar] = await db.query(query);
+    res.status(200).json({ pengajar });
+  } catch (error) {
+    console.error("Error saat mendapatkan data pengajar:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+module.exports = { getPengajarByMataPelajaran, getJumlahPengajar, getPengajar };
