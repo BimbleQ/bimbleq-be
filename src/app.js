@@ -8,10 +8,11 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const siswaRoutes = require('./routes/siswaRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const pengajarRoutes = require('./routes/pengajarRoutes');
 const db = require('./config/db');
 const cors = require('cors');
-
-
+//is app running on HTTPS?
+const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
 
 //middleware
@@ -29,7 +30,9 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            maxAge: 1000 * 60 * 60 * 24, //1 hari
+            maxAge: 1000 * 60 * 60 * 24, // 1 hari
+            sameSite: isProduction ? 'None' : 'Lax', // 'None' untuk produksi, 'Lax' untuk lokal
+            secure: isProduction, // Hanya true jika di produksi (HTTPS)
         },
     })
 );
@@ -43,4 +46,6 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/siswa', siswaRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/pengajar', pengajarRoutes);
+
 module.exports = app;
