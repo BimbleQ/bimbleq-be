@@ -12,6 +12,7 @@ const { createKelas } = require("../controllers/kelasController");
 const { getTagihan } = require("../controllers/tagihanController");
 const { updateStatusTagihan } = require("../controllers/tagihanController");
 const { createPertemuan } = require("../controllers/pertemuanController");
+const { updateKelas } = require("../controllers/kelasController");
 
 const isAuthenticated = require("../middlewares/authMiddleware");
 const isAdmin = require("../middlewares/adminAuthMiddleware");
@@ -50,5 +51,8 @@ router.patch("/updateStatusTagihan", isAuthenticated, isAdmin, updateStatusTagih
 
 // Post Pertemuan Baru
 router.post("/createPertemuan", isAuthenticated, isAdmin, createPertemuan);
+
+// PUT - Edit Kelas /updateKelas?id_kelas=1
+router.put("/updateKelas", isAuthenticated, isAdmin, updateKelas);
 
 module.exports = router;

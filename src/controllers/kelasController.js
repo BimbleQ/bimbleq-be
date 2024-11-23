@@ -119,4 +119,37 @@ const createKelas = async (req, res) => {
   }
 };
 
-module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif, createKelas };
+const updateKelas = async (req, res) => {
+  try {
+    const { id_kelas } = req.query; // Ambil ID kelas dari query string
+    const { id_matpel, nama_kelas, tipe, id_pengajar } = req.body; // Data yang ingin diperbarui
+
+    if (!id_kelas) {
+      return res.status(400).json({ message: "id_kelas harus disertakan" });
+    }
+
+    // Validasi apakah kelas dengan ID tersebut ada
+    const [kelas] = await db.query(`SELECT * FROM kelas WHERE id_kelas = ?`, [id_kelas]);
+    if (kelas.length === 0) {
+      return res.status(404).json({ message: "Kelas tidak ditemukan" });
+    }
+
+    // Update data kelas
+    await db.query(
+      `UPDATE kelas
+           SET id_matpel = COALESCE(?, id_matpel),
+               nama_kelas = COALESCE(?, nama_kelas),
+               tipe = COALESCE(?, tipe),
+               id_pengajar = COALESCE(?, id_pengajar)
+           WHERE id_kelas = ?`,
+      [id_matpel, nama_kelas, tipe, id_pengajar, id_kelas]
+    );
+
+    res.status(200).json({ message: "Kelas berhasil diperbarui" });
+  } catch (error) {
+    console.error("Error saat memperbarui kelas:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
+module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif, createKelas, updateKelas };
