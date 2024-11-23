@@ -27,6 +27,7 @@ const { getPengajuanKelasReguler } = require("../controllers/pengajuanRegulerCon
 const { updateStatusPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
 const { updateStatusPengajuanReguler } = require("../controllers/pengajuanRegulerController");
 const { getPengajar } = require("../controllers/pengajarController");
+const { addPengajar } = require("../controllers/pengajarController");
 const { updatePengajar } = require("../controllers/pengajarController");
 
 const isAuthenticated = require("../middlewares/authMiddleware");
@@ -99,6 +100,9 @@ router.patch("/updateStatusPengajuanReguler", isAuthenticated, isAdmin, updateSt
 
 // GET - Tampilkan Daftar Pengajar
 router.get("/getPengajar", isAuthenticated, isAdmin, getPengajar);
+
+// POST - Daftarkan Pengajar
+router.post("/addPengajar", isAuthenticated, isAdmin, addPengajar);
 
 // PUT - Edit Pengajar
 router.put("/updatePengajar/:id_pengajar", isAuthenticated, isAdmin, updatePengajar);
