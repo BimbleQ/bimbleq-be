@@ -2,19 +2,20 @@ const db = require('../config/db');
 const { differenceInDays } = require('date-fns'); 
 
 
+
 const getRequestKelasPrivat = async (req, res) => {
     try {
-    
         const user = req.session.user;
 
         if (!user || user.role !== 'siswa') {
             return res.status(403).json({ message: 'Akses hanya untuk siswa' });
         }
 
+        // Query untuk mendapatkan data request_kelas_privat
         const [requests] = await db.query(
             `SELECT pelajaran.nama_matpel,
                     pengajar.nama AS nama_pengajar,
-                    request_kelas_privat.tanggal_request,
+                    DATE_FORMAT(request_kelas_privat.waktu_kelas, '%Y-%m-%d %H:%i:%s') AS waktu_kelas, -- Format waktu_kelas sesuai
                     request_kelas_privat.status_request
              FROM request_kelas_privat
              INNER JOIN pelajaran ON request_kelas_privat.id_matpel = pelajaran.id_matpel
@@ -23,19 +24,8 @@ const getRequestKelasPrivat = async (req, res) => {
             [user.id_user]
         );
 
-      
-        const filteredRequests = requests.filter((request) => {
-
-            if (request.status_request !== 'disetujui') {
-                return true;
-            }
-            const requestDate = new Date(request.tanggal_request);
-            const currentDate = new Date();
-            const daysDifference = differenceInDays(currentDate, requestDate);
-
-
-            return daysDifference <= 1;
-        });
+        // Filter data: Tidak mengirimkan data dengan status_request = accepted
+        const filteredRequests = requests.filter((request) => request.status_request !== 'accepted');
 
         res.status(200).json({ requests: filteredRequests });
     } catch (error) {

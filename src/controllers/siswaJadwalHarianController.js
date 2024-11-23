@@ -3,14 +3,16 @@ const db = require('../config/db');
 
 const getPertemuanHariIni = async (req, res) => {
     try {
-   
         const user = req.session.user;
 
+        // Query untuk mendapatkan pertemuan hari ini, termasuk tipe dari tabel kelas
         const [pertemuanHariIni] = await db.query(
-            `SELECT pelajaran.nama_matpel,
-                    pertemuan.waktu_kelas,
-                    pengajar.nama AS nama_pengajar,
-                    kelas.nama_kelas 
+            `SELECT 
+                pelajaran.nama_matpel,
+                pertemuan.waktu_kelas,
+                pengajar.nama AS nama_pengajar,
+                kelas.nama_kelas,
+                kelas.tipe  -- Tambahkan tipe dari tabel kelas
              FROM pertemuan
              INNER JOIN kelas ON pertemuan.id_kelas = kelas.id_kelas
              INNER JOIN pelajaran ON kelas.id_matpel = pelajaran.id_matpel
@@ -19,7 +21,7 @@ const getPertemuanHariIni = async (req, res) => {
              WHERE siswa_kelas.id_siswa = ? AND DATE(pertemuan.waktu_kelas) = CURDATE()`,
             [user.id_user]
         );
-        
+
         res.status(200).json({ pertemuanHariIni });
     } catch (error) {
         console.error('Error mendapatkan data pertemuan siswa:', error);
