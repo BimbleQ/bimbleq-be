@@ -87,4 +87,29 @@ const addSiswaToKelas = async (req, res) => {
   }
 };
 
-module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas, addSiswaToKelas };
+const removeSiswaFromKelas = async (req, res) => {
+  try {
+    const { id_kelas } = req.params; // ID kelas dari parameter
+    const { id_siswa } = req.body; // ID siswa dari body request
+
+    if (!id_kelas || !id_siswa) {
+      return res.status(400).json({ message: "id_kelas dan id_siswa harus disertakan" });
+    }
+
+    // Periksa apakah siswa memang ada di kelas
+    const [checkExisting] = await db.query(`SELECT * FROM siswa_kelas WHERE id_siswa = ? AND id_kelas = ?`, [id_siswa, id_kelas]);
+    if (checkExisting.length === 0) {
+      return res.status(404).json({ message: "Siswa tidak ditemukan di kelas ini" });
+    }
+
+    // Hapus siswa dari kelas
+    await db.query(`DELETE FROM siswa_kelas WHERE id_siswa = ? AND id_kelas = ?`, [id_siswa, id_kelas]);
+
+    res.status(200).json({ message: "Siswa berhasil dihapus dari kelas" });
+  } catch (error) {
+    console.error("Error saat menghapus siswa dari kelas:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
+module.exports = { getJumlahSiswa, getSiswa, getSiswaByKelas, addSiswaToKelas, removeSiswaFromKelas };
