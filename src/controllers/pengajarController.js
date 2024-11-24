@@ -126,7 +126,16 @@ const getPengajarById = async (req, res) => {
     }
 
     // Periksa apakah pengajar dengan ID tersebut ada
-    const [pengajar] = await db.query(`SELECT * FROM pengajar WHERE id_pengajar = ?`, [id_pengajar]);
+    const [pengajar] = await db.query(
+      `
+      SELECT pengajar.*, pelajaran.nama_matpel AS spesialisasi
+      FROM pengajar 
+      LEFT JOIN pelajaran ON pengajar.id_matpel = pelajaran.id_matpel
+      WHERE id_pengajar = ?
+      `,
+      [id_pengajar]
+    );
+
     if (pengajar.length === 0) {
       return res.status(404).json({ message: "Pengajar tidak ditemukan" });
     }
