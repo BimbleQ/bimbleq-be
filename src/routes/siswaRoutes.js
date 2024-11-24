@@ -7,7 +7,7 @@ const { getRequestKelasReguler } = require('../controllers/siswaPengajuanReguler
 const { getPengajarByMataPelajaran } = require('../controllers/pengajarController');
 const { getKelasTujuanRefId, getKelasAwal } = require('../controllers/kelasController');
 const { postRequestKelasReguler } = require('../controllers/siswaReqRegulerController');
-const { getTagihanBySiswa,getHistoriPembayaran } = require('../controllers/siswaPembayaranController');
+const { getTagihanBySiswa,getHistoriPembayaran, uploadBukti, upload } = require('../controllers/siswaPembayaranController');
 const { getCalendarBySiswa } = require('../controllers/siswaCalendarController');
 const isAuthenticated = require('../middlewares/authMiddleware'); 
 const isSiswa = require('../middlewares/siswaAuthMiddleware'); 
@@ -24,9 +24,6 @@ router.post('/crePrivateClass', isAuthenticated,isSiswa,createRequestKelasPrivat
 //kelas reguler
 router.get('/reqRegulerClass', isAuthenticated, isSiswa, getRequestKelasReguler);
 
-//api/siswa/pengajarMatpel?id_matpel=1
-router.get('/pengajarMatpel', isAuthenticated, isSiswa, getPengajarByMataPelajaran);
-
 //api for private class re
 router.get('/pelajaran', isAuthenticated, getMataPelajaran);
     //api/siswa/pengajarMatpel?id_matpel=1
@@ -35,6 +32,7 @@ router.get('/pengajarMatpel', isAuthenticated, isSiswa, getPengajarByMataPelajar
 router.post('/postReqReg', isAuthenticated, isSiswa, postRequestKelasReguler)
 
 //api for req pindah kelas
+//http://localhost:5001/api/siswa/kelasTujuan_refID?id_pertemuan_lama=1
 router.get('/kelasTujuan_refID', isAuthenticated, isSiswa, getKelasTujuanRefId);
 router.get('/kelasAwal', isAuthenticated, isSiswa, getKelasAwal);
 
@@ -45,5 +43,7 @@ router.get('/getTagihanBysiswa',isAuthenticated, isSiswa,getTagihanBySiswa );
 
 //api for showing calendar siswa
 router.get('/getCalendar',isAuthenticated, isSiswa, getCalendarBySiswa );
+
+router.patch("/uploadBukti", isSiswa, upload.single("bukti"), uploadBukti);
 
 module.exports = router;

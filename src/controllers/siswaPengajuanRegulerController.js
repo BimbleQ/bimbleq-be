@@ -1,15 +1,15 @@
 const db = require('../config/db'); 
 const { differenceInDays } = require('date-fns'); 
 
-
 const getRequestKelasReguler = async (req, res) => {
     try {
-        
         const user = req.session.user;
+
         if (!user || user.role !== 'siswa') {
             return res.status(403).json({ message: 'Akses hanya untuk siswa' });
         }
 
+        // Query untuk mendapatkan data request kelas reguler
         const [requests] = await db.query(
             `SELECT 
                 kelas_lama.nama_kelas AS nama_kelas_lama,
@@ -31,22 +31,11 @@ const getRequestKelasReguler = async (req, res) => {
              LEFT JOIN kelas AS kelas_baru ON pertemuan_baru.id_kelas = kelas_baru.id_kelas
              LEFT JOIN pelajaran AS pelajaran_baru ON kelas_baru.id_matpel = pelajaran_baru.id_matpel
              LEFT JOIN pengajar AS pengajar_baru ON pertemuan_baru.id_pengajar = pengajar_baru.id_pengajar
-             WHERE request_kelas_reguler.id_siswa = ?`,
+             WHERE request_kelas_reguler.id_siswa = ? AND request_kelas_reguler.status_request != 'accepted'`,
             [user.id_user]
         );
 
-        const filteredRequests = requests.filter((request) => {
-            if (request.status_request !== 'accepted') {
-                return true;
-            }
-
-            const requestDate = new Date(request.tanggal_request);
-            const currentDate = new Date();
-            const daysDifference = differenceInDays(currentDate, requestDate);
-            return daysDifference <= 1;
-        });
-
-        res.status(200).json({ requests: filteredRequests });
+        res.status(200).json({ requests });
     } catch (error) {
         console.error('Error mendapatkan data request kelas reguler:', error);
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
