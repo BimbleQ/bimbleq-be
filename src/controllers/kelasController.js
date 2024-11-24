@@ -178,4 +178,24 @@ const updateKelas = async (req, res) => {
   }
 };
 
-module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif, createKelas, updateKelas, getKelas };
+const getKelasById = async (req, res) => {
+  try {
+    const { id_kelas } = req.params; // Ambil ID kelas dari parameter
+
+    if (!id_kelas) {
+      return res.status(400).json({ message: "ID kelas harus disertakan" });
+    }
+
+    // Periksa apakah kelas dengan ID tersebut ada
+    const [kelas] = await db.query(`SELECT * FROM kelas WHERE id_kelas = ?`, [id_kelas]);
+    if (kelas.length === 0) {
+      return res.status(404).json({ message: "Kelas tidak ditemukan" });
+    }
+    res.status(200).json({ kelas });
+  } catch (error) {
+    console.error("Error saat mengambil data kelas:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
+module.exports = { getKelasTujuanRefId, getKelasAwal, getJumlahKelasAktif, createKelas, updateKelas, getKelas, getKelasById };
