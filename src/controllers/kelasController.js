@@ -187,7 +187,20 @@ const getKelasById = async (req, res) => {
     }
 
     // Periksa apakah kelas dengan ID tersebut ada
-    const [kelas] = await db.query(`SELECT * FROM kelas WHERE id_kelas = ?`, [id_kelas]);
+    const [kelas] = await db.query(
+      `SELECT 
+              kelas.*,
+              pelajaran.nama_matpel,
+              pengajar.nama AS nama_pengajar,
+              COUNT(siswa_kelas.id_siswa) AS jumlah_siswa
+          FROM kelas
+          LEFT JOIN pelajaran ON kelas.id_matpel = pelajaran.id_matpel
+          LEFT JOIN pengajar ON kelas.id_pengajar = pengajar.id_pengajar
+          LEFT JOIN siswa_kelas ON kelas.id_kelas = siswa_kelas.id_kelas 
+          WHERE kelas.id_kelas = ?
+          GROUP BY kelas.id_kelas`,
+      [id_kelas]
+    );
     if (kelas.length === 0) {
       return res.status(404).json({ message: "Kelas tidak ditemukan" });
     }
