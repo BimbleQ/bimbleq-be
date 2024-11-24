@@ -1,34 +1,27 @@
 # 📦 BimbelQ Backend API - Express.js
 
-Welcome to the **Backend API** repository! This project provides a robust and scalable backend for managing user authentication, data processing, and API endpoints using **Express.js**.
+Welcome to the backend repository of **BimbleQ**, a system designed to streamline scheduling, billing, and custom learning programs for a tutoring center. This backend is built using **Express.js** and connects to a **MySQL database** to provide robust API functionality for managing students, schedules, and invoices.
 
 ---
 
 ## 🚀 Features
 
-- **RESTful API**: CRUD operations with clean and efficient endpoints.
-- **Authentication**: Secure user authentication using JWT.
-- **Database Integration**: Works seamlessly with MySQL/PostgreSQL/MongoDB.
-- **Validation**: Input validation with `Joi` or similar libraries.
-- **Error Handling**: Centralized and consistent error handling.
-- **Logging**: Activity logging with `Winston`.
+- **CRUD Operations**: Manage students, teachers, schedules, and billing with ease.
+- **Integrated API**: Provides endpoints for seamless communication with the frontend.
+- **Scalable Architecture**: Designed to handle the growing needs of a tutoring center.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Technologies
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MySQL/PostgreSQL/MongoDB
-- **Authentication**: JSON Web Token (JWT)
-- **Testing**: Mocha & Chai (optional)
-- **Documentation**: Swagger (optional)
+- **Node.js** with **Express.js**
+- **MySQL** for database management
 
 ---
 
-## 🔧 Setup Instructions
+## 📦 Installation
 
-### 1️⃣ Clone the repository
-```bash
-git clone https://github.com/your-username/backend-api.git
-cd backend-api
+Clone the repository:  
+   ```bash
+   git clone https://github.com/BimbleQ/bimbleq-be.git
+   cd bimbleq-be
