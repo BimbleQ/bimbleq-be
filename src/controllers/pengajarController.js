@@ -1,5 +1,4 @@
 const db = require("../config/db");
-const bcrypt = require("bcrypt");
 
 //jumlah pengajar
 const getJumlahPengajar = async (req, res) => {
@@ -67,11 +66,8 @@ const addPengajar = async (req, res) => {
       return res.status(400).json({ message: "Username, password, nama, dan id_matpel wajib diisi" });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     // Tambahkan ke tabel user
-    const [userResult] = await db.query(`INSERT INTO user (username, password, role) VALUES (?, ?, 'pengajar')`, [username, hashedPassword]);
+    const [userResult] = await db.query(`INSERT INTO user (username, password, role) VALUES (?, ?, 'pengajar')`, [username, password]);
 
     const id_user = userResult.insertId;
 
