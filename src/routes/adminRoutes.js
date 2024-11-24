@@ -4,7 +4,7 @@ const express = require("express");
 const { getMataPelajaran, createPelajaran, removePelajaran } = require("../controllers/pelajaranController");
 const { getJumlahKelasAktif } = require("../controllers/kelasController");
 const { getJumlahPengajar, getPengajarByMataPelajaran } = require("../controllers/pengajarController");
-const { getJumlahSiswa } = require("../controllers/siswaController");
+const { getJumlahSiswa, getSiswaById } = require("../controllers/siswaController");
 const { getJumlahTagihanPending } = require("../controllers/tagihanController");
 const { getJumlahPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
 const { getJumlahPengajuanReguler } = require("../controllers/pengajuanRegulerController");
@@ -129,5 +129,8 @@ router.post("/addPengajar", isAuthenticated, isAdmin, addPengajar);
 
 // PUT - Edit Pengajar
 router.put("/updatePengajar/:id_pengajar", isAuthenticated, isAdmin, updatePengajar);
+
+// GET - Get Siswa by ID
+router.get("/getSiswaById/:id_siswa", isAuthenticated, isAdmin, getSiswaById);
 
 module.exports = router;
