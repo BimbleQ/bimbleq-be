@@ -43,6 +43,7 @@ const getPengajar = async (req, res) => {
   try {
     const query = `
       SELECT 
+          pengajar.id_pengajar,
           pengajar.nama,
           pelajaran.nama_matpel AS spesialisasi,
           pengajar.kontak
