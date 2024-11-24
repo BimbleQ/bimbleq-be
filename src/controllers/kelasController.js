@@ -12,7 +12,8 @@ const getKelasAwal = async (req, res) => {
     const [kelasAwal] = await db.query(
       `SELECT 
                 pertemuan.id_pertemuan, 
-                kelas.nama_kelas 
+                kelas.nama_kelas,
+                DATE_FORMAT(pertemuan.waktu_kelas, '%Y-%m-%d %H:%i:%s') AS waktu_kelas
              FROM siswa_kelas
              JOIN kelas ON siswa_kelas.id_kelas = kelas.id_kelas
              JOIN pertemuan ON kelas.id_kelas = pertemuan.id_kelas
@@ -33,43 +34,50 @@ const getKelasAwal = async (req, res) => {
 
 //mendapatkan daftar kelas tujuan berdasarkan mata pelajaran dari kelas awal
 const getKelasTujuanRefId = async (req, res) => {
-  const { id_pertemuan_lama } = req.query;
-
-  if (!id_pertemuan_lama) {
-    return res.status(400).json({ message: "id_pertemuan_lama harus disertakan" });
-  }
-
-  try {
-    const [matpelResult] = await db.query(
-      `SELECT kelas.id_matpel 
-             FROM pertemuan 
-             JOIN kelas ON pertemuan.id_kelas = kelas.id_kelas
-             WHERE pertemuan.id_pertemuan = ?`,
-      [id_pertemuan_lama]
-    );
-
-    if (matpelResult.length === 0) {
-      return res.status(404).json({ message: "Kelas awal tidak ditemukan" });
+    const { id_pertemuan_lama } = req.query;
+  
+    if (!id_pertemuan_lama) {
+      return res.status(400).json({ message: "id_pertemuan_lama harus disertakan" });
     }
-
-    const id_matpel = matpelResult[0].id_matpel;
-
-    const [kelasTujuan] = await db.query(
-      `SELECT 
-                pertemuan.id_pertemuan, 
-                kelas.nama_kelas 
-             FROM pertemuan 
-             JOIN kelas ON pertemuan.id_kelas = kelas.id_kelas
-             WHERE kelas.id_matpel = ?`,
-      [id_matpel]
-    );
-
-    res.status(200).json({ kelasTujuan });
-  } catch (error) {
-    console.error("Error mendapatkan data kelas tujuan:", error);
-    res.status(500).json({ message: "Terjadi kesalahan pada server" });
-  }
-};
+  
+    try {
+      // Ambil id_kelas dari id_pertemuan_lama
+      const [kelasAwalResult] = await db.query(
+        `SELECT kelas.id_matpel
+               FROM pertemuan
+               JOIN kelas ON pertemuan.id_kelas = kelas.id_kelas
+               WHERE pertemuan.id_pertemuan = ?`,
+        [id_pertemuan_lama]
+      );
+  
+      if (kelasAwalResult.length === 0) {
+        return res.status(404).json({ message: "Kelas awal tidak ditemukan" });
+      }
+  
+      const id_matpel = kelasAwalResult[0].id_matpel;
+  
+      // Ambil data id_pertemuan, nama_kelas, dan waktu_kelas untuk kelas tujuan
+      const [kelasTujuan] = await db.query(
+        `SELECT 
+                  pertemuan.id_pertemuan,
+                  kelas.nama_kelas,
+                  DATE_FORMAT(pertemuan.waktu_kelas, '%Y-%m-%d %H:%i:%s') AS waktu_kelas
+               FROM pertemuan
+               JOIN kelas ON pertemuan.id_kelas = kelas.id_kelas
+               WHERE kelas.id_matpel = ? AND pertemuan.id_pertemuan != ?`,
+        [id_matpel, id_pertemuan_lama]
+      );
+  
+      if (kelasTujuan.length === 0) {
+        return res.status(404).json({ message: "Kelas tujuan tidak ditemukan" });
+      }
+  
+      res.status(200).json({ kelasTujuan });
+    } catch (error) {
+      console.error("Error mendapatkan data kelas tujuan:", error);
+      res.status(500).json({ message: "Terjadi kesalahan pada server" });
+    }
+  };
 
 const getJumlahKelasAktif = async (req, res) => {
   try {
