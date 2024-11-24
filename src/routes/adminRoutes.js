@@ -3,7 +3,7 @@ const express = require("express");
 // Halaman Admin Utama
 const { getMataPelajaran, createPelajaran, removePelajaran } = require("../controllers/pelajaranController");
 const { getJumlahKelasAktif } = require("../controllers/kelasController");
-const { getJumlahPengajar, getPengajarByMataPelajaran } = require("../controllers/pengajarController");
+const { getJumlahPengajar, getPengajarByMataPelajaran, getPengajarById } = require("../controllers/pengajarController");
 const { getJumlahSiswa, getSiswaById } = require("../controllers/siswaController");
 const { getJumlahTagihanPending } = require("../controllers/tagihanController");
 const { getJumlahPengajuanPrivat } = require("../controllers/pengajuanPrivateController");
@@ -132,5 +132,8 @@ router.put("/updatePengajar/:id_pengajar", isAuthenticated, isAdmin, updatePenga
 
 // GET - Get Siswa by ID
 router.get("/getSiswaById/:id_siswa", isAuthenticated, isAdmin, getSiswaById);
+
+// GET - Get Pengajar by ID
+router.get("/getPengajarById/:id_pengajar", isAuthenticated, isAdmin, getPengajarById);
 
 module.exports = router;

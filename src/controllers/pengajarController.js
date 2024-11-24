@@ -117,4 +117,24 @@ const updatePengajar = async (req, res) => {
   }
 };
 
-module.exports = { getPengajarByMataPelajaran, getJumlahPengajar, getPengajar, addPengajar, updatePengajar };
+const getPengajarById = async (req, res) => {
+  try {
+    const { id_pengajar } = req.params; // Ambil ID pengajar dari parameter
+
+    if (!id_pengajar) {
+      return res.status(400).json({ message: "ID pengajar harus disertakan" });
+    }
+
+    // Periksa apakah pengajar dengan ID tersebut ada
+    const [pengajar] = await db.query(`SELECT * FROM pengajar WHERE id_pengajar = ?`, [id_pengajar]);
+    if (pengajar.length === 0) {
+      return res.status(404).json({ message: "Pengajar tidak ditemukan" });
+    }
+    res.status(200).json({ pengajar });
+  } catch (error) {
+    console.error("Error saat mengambil data pengajar:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+};
+
+module.exports = { getPengajarByMataPelajaran, getJumlahPengajar, getPengajar, addPengajar, updatePengajar, getPengajarById };
